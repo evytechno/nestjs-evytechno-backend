@@ -31,10 +31,10 @@ export class AuthService {
       const refresh_token = this.jwtService.sign(payload, {
         expiresIn: '2d',
       });
-      await this.userService.updateRefreshToken(
-        (user._id as any).toHexString(),
-        refresh_token,
-      );
+      await this.userService.updateOne((user._id as any).toHexString(), {
+        access_token: access_token,
+        refresh_token: refresh_token,
+      });
       return {
         success: true,
         user: result,
@@ -69,7 +69,10 @@ export class AuthService {
 
   async logout(id: string) {
     try {
-      const user = await this.userService.updateRefreshToken(id, null);
+      const user = await this.userService.updateOne(id, {
+        refresh_token: null,
+        access_token: null,
+      });
       return {
         success: true,
 

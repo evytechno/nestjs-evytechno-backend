@@ -175,17 +175,17 @@ export class UserService {
   }
 
   //Updating Refresh Token
-  async updateRefreshToken(id: string, token: string | null) {
-    try {
-      // const hashedToken = token ? await bcrypt.hash(token, 10) : null;
-      const user = await this.updateOne(id, { refresh_token: token });
+  // async updateRefreshToken(id: string, token: string | null) {
+  //   try {
+  //     // const hashedToken = token ? await bcrypt.hash(token, 10) : null;
+  //     const user = await this.updateOne(id, { refresh_token: token });
 
-      return user;
-    } catch (error) {
-      throw new HttpException(
-        { error: error },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
+  //     return user;
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       { error: error },
+  //       HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
 }

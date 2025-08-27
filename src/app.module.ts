@@ -16,7 +16,6 @@ import { ElementModule } from './element/element.module';
 import * as dotenv from 'dotenv';
 import { Response } from 'express';
 import { AuthModule } from './auth/auth.module';
-import { BlacklistModule } from './blacklist/blacklist.module';
 
 dotenv.config({ path: '.env' });
 
@@ -34,7 +33,6 @@ if (!process.env.DATABASE_URL) {
     ServicesModule,
     ElementModule,
     AuthModule,
-    BlacklistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
