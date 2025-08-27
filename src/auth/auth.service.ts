@@ -27,14 +27,18 @@ export class AuthService {
       const { password, ...result } = user.toObject ? user.toObject() : user;
 
       const payload = { username: result.username, sub: result._id };
-      const access_token = this.jwtService.sign(payload);
-      const refresh_token = this.jwtService.sign(payload, { expiresIn: '2d' });
-      await this.userService.updateRefreshToken(user.id, refresh_token);
+      const access_token = this.jwtService.sign(payload, { expiresIn: '30m' });
+      const refresh_token = this.jwtService.sign(payload, {
+        expiresIn: '2d',
+      });
+      await this.userService.updateRefreshToken(
+        (user._id as any).toHexString(),
+        refresh_token,
+      );
       return {
         success: true,
         user: result,
         access_token: access_token,
-        refresh_token: refresh_token,
       };
     } catch (error) {
       if (error.status === 404) {
@@ -68,14 +72,18 @@ export class AuthService {
       const user = await this.userService.updateRefreshToken(id, null);
       return {
         success: true,
-        user: user,
+
         message: 'user logged out',
       };
     } catch (error) {
-      throw new HttpException(
-        { success: false, error: error },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error.response.error.status === 404) {
+        throw new NotFoundException('User Not Found');
+      } else {
+        throw new HttpException(
+          { success: false, error: error },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

@@ -108,6 +108,7 @@ export class UserService {
       if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
       }
+
       const updatedUser = await this.userModel.findByIdAndUpdate(id, data, {
         new: true,
         runValidators: true,
@@ -119,7 +120,7 @@ export class UserService {
         message: 'User Updated',
       };
     } catch (error) {
-      console.error('Error updating user', error);
+      // console.error('Error updating user', error);
 
       if (error.name === 'CastError') {
         throw new NotFoundException({
@@ -166,7 +167,7 @@ export class UserService {
 
   // Retrieve User data by username used in Log in
   async findByUsername(username: string) {
-    const user = await this.userModel.findOne({ username: username }).lean();
+    const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new NotFoundException({ message: 'User not found' });
     }
@@ -174,10 +175,17 @@ export class UserService {
   }
 
   //Updating Refresh Token
-  async updateRefreshToken(userId: string, token: string | null) {
-    const hashedToken = token ? await bcrypt.hash(token, 10) : null;
-    await this.userModel.findByIdAndUpdate(userId, {
-      refreshToken: hashedToken,
-    });
+  async updateRefreshToken(id: string, token: string | null) {
+    try {
+      // const hashedToken = token ? await bcrypt.hash(token, 10) : null;
+      const user = await this.updateOne(id, { refresh_token: token });
+
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        { error: error },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
