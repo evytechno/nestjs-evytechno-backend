@@ -16,6 +16,8 @@ import { ElementModule } from './element/element.module';
 import * as dotenv from 'dotenv';
 import { Response } from 'express';
 import { AuthModule } from './auth/auth.module';
+import { BlogPostService } from './blog-post/blog-post.service';
+import { BlogPostModule } from './blog-post/blog-post.module';
 
 dotenv.config({ path: '.env' });
 
@@ -33,6 +35,7 @@ if (!process.env.DATABASE_URL) {
     ServicesModule,
     ElementModule,
     AuthModule,
+    BlogPostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

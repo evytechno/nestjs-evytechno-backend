@@ -27,17 +27,20 @@ export class AuthService {
       const { password, ...result } = user.toObject ? user.toObject() : user;
 
       const payload = { username: result.username, sub: result._id };
-      const access_token = this.jwtService.sign(payload, { expiresIn: '30m' });
+      const access_token = this.jwtService.sign(payload, { expiresIn: '2h' });
       const refresh_token = this.jwtService.sign(payload, {
         expiresIn: '2d',
       });
-      await this.userService.updateOne((user._id as any).toHexString(), {
-        access_token: access_token,
-        refresh_token: refresh_token,
-      });
+      const loggedUser = await this.userService.updateOne(
+        (user._id as any).toHexString(),
+        {
+          access_token: access_token,
+          refresh_token: refresh_token,
+        },
+      ).data;
       return {
         success: true,
-        user: result,
+        user: loggedUser,
         access_token: access_token,
       };
     } catch (error) {
