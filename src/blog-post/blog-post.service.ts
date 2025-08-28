@@ -51,9 +51,8 @@ export class BlogPostService {
   }
 
   //Retrieve Blogs
-  async findAll(data:FindBlogPostDto){
-    try{
-
-    }
+  async findAll(data: FindBlogPostDto) {
+    try {
+    } catch (error) {}
   }
 }
