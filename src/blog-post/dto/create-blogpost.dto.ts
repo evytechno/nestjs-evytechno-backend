@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsMongoId,
@@ -9,10 +10,12 @@ import {
 export class CreateBlogPostDto {
   @IsNotEmpty()
   @IsString()
+  @Transform(({ value }) => value?.trim())
   title: string;
 
   @IsNotEmpty()
   @IsString()
+  @Transform(({ value }) => value?.trim())
   content: string;
 
   @IsOptional()

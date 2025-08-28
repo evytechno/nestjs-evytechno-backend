@@ -31,12 +31,11 @@ export class AuthService {
       const refresh_token = this.jwtService.sign(payload, {
         expiresIn: '2d',
       });
-      const loggedUser = await this.userService.updateOne(
-        (user._id as any).toHexString(),
-        {
+      const loggedUser = (
+        await this.userService.updateOne((user._id as any).toHexString(), {
           access_token: access_token,
           refresh_token: refresh_token,
-        },
+        })
       ).data;
       return {
         success: true,

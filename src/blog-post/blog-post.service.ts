@@ -1,15 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BlogPost, BlogPostDocument } from './schemas/blogPost.schema';
 import { Model } from 'mongoose';
 import { CreateBlogPostDto } from './dto/create-blogpost.dto';
+import { FindBlogPostDto } from './dto/find-blogpost.dto';
 
 @Injectable()
 export class BlogPostService {
   constructor(
     @InjectModel(BlogPost.name) private blogPostModel: Model<BlogPostDocument>,
   ) {}
-
+  //Create new blog post
   async create(data: CreateBlogPostDto) {
     try {
       const newBlogPost = await this.blogPostModel.create(data);
@@ -20,14 +26,34 @@ export class BlogPostService {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException(
-        {
+
+      if (error.name === 'ValidationError') {
+        const validationErrors = Object.values(error.errors).map(
+          (err: any) => err.message,
+        );
+        throw new BadRequestException({
           success: false,
-          error: error,
-          message: 'server error',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+          message: 'Validation Failed',
+          error: `Invalid intput: ${validationErrors.join(', ')}`,
+        });
+      } else {
+        //Unexpected Error
+        throw new HttpException(
+          {
+            success: false,
+            message: 'Blog not Created',
+            error: 'An unexpected error occured',
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
+  }
+
+  //Retrieve Blogs
+  async findAll(data:FindBlogPostDto){
+    try{
+
     }
   }
 }

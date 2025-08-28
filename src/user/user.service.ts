@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -31,29 +32,32 @@ export class UserService {
         const validationErrors = Object.values(error.errors).map(
           (err: any) => err.message,
         );
-        return {
+        throw new BadRequestException({
           success: false,
           message: 'Validation Failed',
           error: `Invalid intput: ${validationErrors.join(', ')}`,
-        };
+        });
       }
 
       //Duplicate user error
       if (error.errorResponse.code === 11000) {
         const duplicateField = Object.keys(error.errorResponse.keyPattern);
-        return {
+        throw new BadRequestException({
           success: false,
           message: 'User not created',
           error: `${duplicateField} already exists`,
-        };
+        });
+      } else {
+        //Unexpected Error
+        throw new HttpException(
+          {
+            success: false,
+            message: 'User not Created',
+            error: 'An unexpected error occured',
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
-
-      //Unexpected Error
-      return {
-        success: false,
-        message: 'User not Created',
-        error: 'An unexpected error occured',
-      };
     }
   }
 

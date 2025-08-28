@@ -19,7 +19,7 @@ export class BlogPost {
   @Prop({ type: Types.ObjectId, ref: Services.name })
   category: Types.ObjectId;
 
-  @Prop({ required: true, default: Date.now() })
+  @Prop({ default: Date.now() })
   date_created: Date;
 
   @Prop({ default: false })
