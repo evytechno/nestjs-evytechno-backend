@@ -29,10 +29,17 @@ async function bootstrap() {
     }),
   );
 
-  // Global Guards
-  app.useGlobalGuards(app.get(JwtAuthGuard));
+  app.setGlobalPrefix('/api');
 
-  await app.listen(process.env.PORT ?? 3000);
+  // Global Guards
+  // app.useGlobalGuards(app.get(JwtAuthGuard));
+  console.log(process.env.HOSTNAME, process.env.PORT);
+  await app.listen(5000, `127.0.0.1`);
+
+  // await app.listen(
+  //   process.env.PORT ?? 3000,
+  //   process.env.HOSTNAME ?? '127.0.0.1',
+  // );
   app.useGlobalFilters(new AllExceptionsFilter());
 }
 bootstrap();

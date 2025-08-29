@@ -51,8 +51,22 @@ export class BlogPostService {
   }
 
   //Retrieve Blogs
-  async findAll(data: FindBlogPostDto) {
+  async findAll() {
     try {
-    } catch (error) {}
+      const blogs = await this.blogPostModel.find();
+      return {
+        success: true,
+        message: 'Blog List',
+        data: blogs,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        {
+          sucess: false,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
