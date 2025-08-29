@@ -30,6 +30,11 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('/api');
+  app.enableCors({
+    origin: 'http://localhost:8000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // Global Guards
   // app.useGlobalGuards(app.get(JwtAuthGuard));
