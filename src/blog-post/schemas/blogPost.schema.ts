@@ -11,6 +11,9 @@ export class BlogPost {
   title: string;
 
   @Prop({ required: true })
+  short_descirption: string;
+
+  @Prop({ required: true })
   content: string;
 
   @Prop({ default: null })
@@ -39,6 +42,15 @@ export class BlogPost {
 
   @Prop({ default: null })
   date_deleted: Date;
+
+  @Prop({ default: null })
+  seo_title: string;
+
+  @Prop({ default: null })
+  seo_description: string;
+
+  @Prop({ default: null })
+  keywords: string;
 }
 
 export const BlogPostSchema = SchemaFactory.createForClass(BlogPost);

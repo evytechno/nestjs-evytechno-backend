@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UploadedFile,
   UploadedFiles,
@@ -14,6 +15,7 @@ import { CreateBlogPostDto } from './dto/create-blogpost.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { UpdateBlogPostDto } from './dto/update-blogpost.dto';
 
 @Controller('blog')
 export class BlogPostController {
@@ -36,8 +38,6 @@ export class BlogPostController {
     @UploadedFile() banner: Express.Multer.File,
     @Body() body: CreateBlogPostDto,
   ) {
-    console.log(body);
-    console.log('File : {', banner, '}');
     const bannerImage = banner ? banner.filename : null;
 
     return this.blogPostService.create(body, bannerImage);
@@ -49,6 +49,28 @@ export class BlogPostController {
       return this.blogPostService.findOne(query.id);
     }
     return this.blogPostService.findAll();
+  }
+
+  @Put(`:id`)
+  @UseInterceptors(
+    FileInterceptor('banner', {
+      storage: diskStorage({
+        destination: './uploads/blog_images',
+        filename: (req, banner, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          callback(null, `${uniqueSuffix}${extname(banner.originalname)}`);
+        },
+      }),
+    }),
+  )
+  update(
+    @Param(`id`) id: string,
+    @Body() body: UpdateBlogPostDto,
+    @UploadedFile() banner: Express.Multer.File,
+  ) {
+    const bannerImage = banner ? banner.filename : null;
+    return this.blogPostService.updateOne(id, body, bannerImage);
   }
 
   // @Get()

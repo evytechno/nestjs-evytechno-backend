@@ -10,6 +10,7 @@ import { BlogPost, BlogPostDocument } from './schemas/blogPost.schema';
 import { Model } from 'mongoose';
 import { CreateBlogPostDto } from './dto/create-blogpost.dto';
 import { FindBlogPostDto } from './dto/find-blogpost.dto';
+import { UpdateBlogPostDto } from './dto/update-blogpost.dto';
 
 @Injectable()
 export class BlogPostService {
@@ -56,7 +57,7 @@ export class BlogPostService {
     try {
       const blogs = await this.blogPostModel
         .find()
-        .select('title date_created _is_published date_published');
+        .select('title date_created is_published date_published');
       return {
         success: true,
         message: 'Blog List',
@@ -94,6 +95,37 @@ export class BlogPostService {
         {
           success: false,
           message: 'Error fetching blog Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async updateOne(id: string, data: UpdateBlogPostDto, banner: string | null) {
+    try {
+      const updatedBlog = await this.blogPostModel.findByIdAndUpdate(
+        id,
+        { ...data, banner },
+        { new: true, runValidators: true },
+      );
+      return {
+        success: true,
+        data: updatedBlog,
+        message: 'Blog Updated',
+      };
+    } catch (error) {
+      // console.error('Error updating user', error);
+
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'Blog not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Failed to Update Blog',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

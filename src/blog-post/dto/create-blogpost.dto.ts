@@ -29,4 +29,20 @@ export class CreateBlogPostDto {
   @IsOptional()
   @IsBoolean()
   is_published: boolean;
+
+  @IsOptional()
+  @IsString()
+  banner: string;
+
+  @IsOptional()
+  @IsString()
+  seo_title: string;
+
+  @IsOptional()
+  @IsString()
+  seo_description: string;
+
+  @IsOptional()
+  @IsString()
+  keywords: string;
 }
