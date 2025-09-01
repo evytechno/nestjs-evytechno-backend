@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -42,7 +44,15 @@ export class BlogPostController {
   }
 
   @Get()
-  find() {
+  find(@Query() query: any) {
+    if (query?.id) {
+      return this.blogPostService.findOne(query.id);
+    }
     return this.blogPostService.findAll();
   }
+
+  // @Get()
+  // findOne(@Param(`id`) id: string) {
+  //   return this.blogPostService.findOne(id);
+  // }
 }

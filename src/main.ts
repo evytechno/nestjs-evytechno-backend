@@ -2,9 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AllExceptionsFilter, AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt/jwt-auth.guard';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/blog_images',
+  });
 
   // Global Exveption Handling
   app.useGlobalPipes(
@@ -28,8 +34,9 @@ async function bootstrap() {
       },
     }),
   );
-
+  // default prefix /api for api calls
   app.setGlobalPrefix('/api');
+  // Cors
   app.enableCors({
     origin: 'http://localhost:8000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

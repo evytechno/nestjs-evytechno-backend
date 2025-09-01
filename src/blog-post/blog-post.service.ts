@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BlogPost, BlogPostDocument } from './schemas/blogPost.schema';
@@ -53,7 +54,9 @@ export class BlogPostService {
   //Retrieve Blogs
   async findAll() {
     try {
-      const blogs = await this.blogPostModel.find();
+      const blogs = await this.blogPostModel
+        .find()
+        .select('title date_created _is_published date_published');
       return {
         success: true,
         message: 'Blog List',
@@ -64,6 +67,33 @@ export class BlogPostService {
       throw new HttpException(
         {
           sucess: false,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // Retreive specific Blog
+  async findOne(id: any) {
+    try {
+      const blog = await this.blogPostModel.findById(id);
+      return {
+        success: true,
+        message: 'Blog found',
+        data: blog,
+      };
+    } catch (error) {
+      console.error('error finding blog', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'blog not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching blog Details',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
