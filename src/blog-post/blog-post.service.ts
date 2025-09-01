@@ -16,9 +16,9 @@ export class BlogPostService {
     @InjectModel(BlogPost.name) private blogPostModel: Model<BlogPostDocument>,
   ) {}
   //Create new blog post
-  async create(data: CreateBlogPostDto) {
+  async create(data: CreateBlogPostDto, banner: string | null) {
     try {
-      const newBlogPost = await this.blogPostModel.create(data);
+      const newBlogPost = await this.blogPostModel.create({ ...data, banner });
       return {
         success: true,
         data: newBlogPost,

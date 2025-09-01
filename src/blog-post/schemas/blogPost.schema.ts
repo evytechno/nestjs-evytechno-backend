@@ -13,6 +13,9 @@ export class BlogPost {
   @Prop({ required: true })
   content: string;
 
+  @Prop({ default: null })
+  banner: string;
+
   @Prop({ required: true, type: Types.ObjectId, ref: User.name })
   author: Types.ObjectId;
 

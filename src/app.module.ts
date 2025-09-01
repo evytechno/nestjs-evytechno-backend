@@ -18,6 +18,7 @@ import { Response } from 'express';
 import { AuthModule } from './auth/auth.module';
 import { BlogPostService } from './blog-post/blog-post.service';
 import { BlogPostModule } from './blog-post/blog-post.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 dotenv.config({ path: '.env' });
 
@@ -36,6 +37,9 @@ if (!process.env.DATABASE_URL) {
     ElementModule,
     AuthModule,
     BlogPostModule,
+    MulterModule.register({
+      dest: './uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
