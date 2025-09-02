@@ -18,6 +18,11 @@ export class CreateBlogPostDto {
   @Transform(({ value }) => value?.trim())
   content: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @Transform(({ value }) => value?.trim())
+  short_description: string;
+
   @IsOptional()
   @IsMongoId()
   author: string;

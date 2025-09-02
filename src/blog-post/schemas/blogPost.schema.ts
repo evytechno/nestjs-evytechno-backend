@@ -11,7 +11,7 @@ export class BlogPost {
   title: string;
 
   @Prop({ required: true })
-  short_descirption: string;
+  short_description: string;
 
   @Prop({ required: true })
   content: string;
