@@ -57,7 +57,8 @@ export class BlogPostService {
     try {
       const blogs = await this.blogPostModel
         .find()
-        .select('title date_created is_published date_published');
+        .select('title date_created is_published date_published')
+        .sort({ date_created: -1 });
       return {
         success: true,
         message: 'Blog List',
