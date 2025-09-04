@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,
+  IsDateString,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
@@ -51,4 +52,8 @@ export class CreateBlogPostDto {
   @IsOptional()
   @IsString()
   keywords: string;
+
+  @IsOptional()
+  @IsDateString()
+  date_published: Date;
 }
