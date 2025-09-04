@@ -33,6 +33,7 @@ export class CreateBlogPostDto {
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   is_published: boolean;
 
   @IsOptional()

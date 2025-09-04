@@ -6,12 +6,22 @@ export type ServicesDocument = Services & Document;
 export class Services {
   @Prop({ required: true })
   name: string;
+
   @Prop({})
   icon: string;
+
   @Prop({ required: true })
   description: string;
+
   @Prop({})
-  image: string;
+  banner: string;
+
+  @Prop({ default: '#ffffff' })
+  color1: string;
+
+  @Prop({ default: '#000000' })
+  color2: string;
+
   // @Prop() //elements foreign key to be implemented
   // elements:
 }
