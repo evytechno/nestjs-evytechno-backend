@@ -56,8 +56,11 @@ export class BlogPostService {
   async findAll() {
     try {
       const blogs = await this.blogPostModel
-        .find()
-        .select('title date_created is_published date_published')
+        .find({ is_deleted: false })
+        .select(
+          'title date_created is_published date_published is_deleted category',
+        )
+        .populate('category')
         .sort({ date_created: -1 });
       return {
         success: true,
