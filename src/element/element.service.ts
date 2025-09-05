@@ -68,9 +68,6 @@ export class ElementService {
         .find({ service: serviceId })
         .populate('service');
 
-      if (elementList.length <= 0) {
-        throw new NotFoundException('Elements with Service Id not Found');
-      }
       return {
         success: true,
         data: elementList,
@@ -78,17 +75,14 @@ export class ElementService {
       };
     } catch (error) {
       console.log(error);
-      if (error.response.statusCode === 404) {
-        throw new NotFoundException('Elements with Service Id not Found');
-      } else {
-        throw new HttpException(
-          {
-            sucess: false,
-            message: error,
-          },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+
+      throw new HttpException(
+        {
+          sucess: false,
+          message: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
