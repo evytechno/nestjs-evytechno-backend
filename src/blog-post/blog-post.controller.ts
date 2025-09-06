@@ -22,25 +22,8 @@ export class BlogPostController {
   constructor(private readonly blogPostService: BlogPostService) {}
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('banner', {
-      storage: diskStorage({
-        destination: './uploads/blog_images',
-        filename: (req, banner, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueSuffix}${extname(banner.originalname)}`);
-        },
-      }),
-    }),
-  )
-  create(
-    @UploadedFile() banner: Express.Multer.File,
-    @Body() body: CreateBlogPostDto,
-  ) {
-    const bannerImage = banner ? banner.filename : null;
-
-    return this.blogPostService.create(body, bannerImage);
+  create(@Body() body: CreateBlogPostDto) {
+    return this.blogPostService.create(body);
   }
 
   @Get()
