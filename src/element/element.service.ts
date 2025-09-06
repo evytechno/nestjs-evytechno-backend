@@ -18,15 +18,20 @@ export class ElementService {
   ) {}
 
   // to create a new element
+  // async create(data: any) {
+  //   console.log('data:>>', data);
+  //   return data;
+  // }
+
   async create(
     data: CreateElementDto,
-    banner: string | null,
+    image: string | null,
     icon: string | null,
   ) {
     try {
       const newElement = await this.elementModel.create({
         ...data,
-        banner,
+        image,
         icon,
       });
       return {

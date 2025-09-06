@@ -8,9 +8,15 @@ import {
 } from 'class-validator';
 
 export class CreateElementDto {
+  // @Transform(({ value }) => {
+  //   console.log('NAME', value);
+
+  //   return value?.trim();
+  // })
+  // @IsNotEmpty()
   @IsNotEmpty()
-  @IsString()
-  @Transform(({ value }) => value?.trim())
+  // @IsString()
+  @IsOptional()
   name: string;
 
   @IsOptional()

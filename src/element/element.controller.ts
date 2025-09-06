@@ -28,36 +28,35 @@ export class ElementController {
       storage: diskStorage({
         destination: './uploads/element/image',
         filename: (req, image, callback) => {
-          const uniqueSuffix =
+          const uniqueSuffixImage =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueSuffix}${extname(image.originalname)}`);
+          callback(null, `${uniqueSuffixImage}${extname(image.originalname)}`);
         },
       }),
     }),
-  )
-  @UseInterceptors(
+
     FileInterceptor('icon', {
       storage: diskStorage({
         destination: './uploads/element/icon',
         filename: (req, icon, callback) => {
-          const uniqueSuffix =
+          const uniqueSuffixIcon =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueSuffix}${extname(icon.originalname)}`);
+          callback(null, `${uniqueSuffixIcon}${extname(icon.originalname)}`);
         },
       }),
     }),
   )
-  create(
-    @UploadedFile() image: Express.Multer.File,
-    // @UploadedFile() icon: Express.Multer.File,
+  async create(
     @Body() body: CreateElementDto,
+    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() icon: Express.Multer.File,
   ) {
+    console.log('BODY', body);
     const imageFile = image ? image.filename : null;
-    const iconFile = image ? image.filename : null;
-
-    // const iconFile = icon ? icon.filename : null;
+    const iconFile = icon ? icon.filename : null;
 
     return this.elementService.create(body, imageFile, iconFile);
+    // return await this.elementService.create(body);
   }
 
   @Get()
