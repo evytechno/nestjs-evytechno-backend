@@ -4,9 +4,13 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt/jwt-auth.guard';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.use(bodyParser.json({ limit: '50mb' })); // for JSON
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
