@@ -23,16 +23,10 @@ export class ElementService {
   //   return data;
   // }
 
-  async create(
-    data: CreateElementDto,
-    image: string | null,
-    icon: string | null,
-  ) {
+  async create(data: CreateElementDto) {
     try {
       const newElement = await this.elementModel.create({
         ...data,
-        image,
-        icon,
       });
       return {
         succcess: true,
