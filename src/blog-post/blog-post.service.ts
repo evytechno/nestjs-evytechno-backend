@@ -105,11 +105,11 @@ export class BlogPostService {
     }
   }
 
-  async updateOne(id: string, data: UpdateBlogPostDto, banner: string | null) {
+  async updateOne(id: string, data: UpdateBlogPostDto) {
     try {
       const updatedBlog = await this.blogPostModel.findByIdAndUpdate(
         id,
-        { ...data, banner },
+        { ...data },
         { new: true, runValidators: true },
       );
       return {

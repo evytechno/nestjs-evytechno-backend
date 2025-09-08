@@ -35,25 +35,8 @@ export class BlogPostController {
   }
 
   @Put(`:id`)
-  @UseInterceptors(
-    FileInterceptor('banner', {
-      storage: diskStorage({
-        destination: './uploads/blog_images',
-        filename: (req, banner, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueSuffix}${extname(banner.originalname)}`);
-        },
-      }),
-    }),
-  )
-  update(
-    @Param(`id`) id: string,
-    @Body() body: UpdateBlogPostDto,
-    @UploadedFile() banner: Express.Multer.File,
-  ) {
-    const bannerImage = banner ? banner.filename : null;
-    return this.blogPostService.updateOne(id, body, bannerImage);
+  update(@Param(`id`) id: string, @Body() body: UpdateBlogPostDto) {
+    return this.blogPostService.updateOne(id, body);
   }
 
   // @Get()
