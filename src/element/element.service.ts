@@ -59,6 +59,33 @@ export class ElementService {
     }
   }
 
+  // Retreive specific element
+  async findOne(id: any) {
+    try {
+      const element = await this.elementModel.findById(id);
+      return {
+        success: true,
+        message: 'Element found',
+        data: element,
+      };
+    } catch (error) {
+      console.error('error finding element', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'blog not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching element Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   // retrieve by service
 
   async findByService(serviceId: string) {
@@ -109,16 +136,11 @@ export class ElementService {
     }
   }
 
-  async updateOne(
-    id: string,
-    data: UpdateElementDto,
-    image: string | null,
-    icon: string | null,
-  ) {
+  async updateOne(id: string, data: UpdateElementDto) {
     try {
       const updatedElement = await this.elementModel.findByIdAndUpdate(
         id,
-        { ...data, image, icon },
+        { ...data },
         { new: true, runValidators: true },
       );
       return {
