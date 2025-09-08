@@ -11,7 +11,7 @@ export class Case {
   @Prop({ type: Types.ObjectId, ref: Services.name, required: true })
   category: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({})
   skills: string;
 
   @Prop({})

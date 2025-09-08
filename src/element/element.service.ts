@@ -91,7 +91,7 @@ export class ElementService {
   async findByService(serviceId: string) {
     try {
       const elementList = await this.elementModel
-        .find({ service: serviceId })
+        .find({ service: serviceId, is_deleted: false })
         .populate('service');
 
       return {
@@ -114,7 +114,9 @@ export class ElementService {
 
   async findAll() {
     try {
-      const elementList = await this.elementModel.find().populate('service');
+      const elementList = await this.elementModel
+        .find({ is_deleted: false })
+        .populate('service');
       return {
         success: true,
         data: elementList,

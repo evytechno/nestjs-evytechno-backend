@@ -52,7 +52,7 @@ export class CaseService {
   async findByCategory(categoryId: string) {
     try {
       const caseList = await this.caseModel
-        .find({ category: categoryId })
+        .find({ category: categoryId, is_deleted: false })
         .populate('category');
 
       return {
@@ -101,7 +101,9 @@ export class CaseService {
 
   async findAll() {
     try {
-      const caseList = await this.caseModel.find().populate('category');
+      const caseList = await this.caseModel
+        .find({ is_deleted: false })
+        .populate('category');
       return {
         success: true,
         data: caseList,
