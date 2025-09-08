@@ -1,7 +1,3 @@
-import { Element, ElementDocument } from './schemas/element.schema';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { CreateElementDto } from './dto/create-element.dto';
 import {
   BadRequestException,
   HttpException,
@@ -9,29 +5,23 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateElementDto } from './dto/update-element.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Case, CaseDocument } from './schema/case.schema';
+import { Model } from 'mongoose';
+import { CreateCaseDto } from './dto/create-case.dto';
+import { UpdateCaseDto } from './dto/update-case.dto';
 
 @Injectable()
-export class ElementService {
-  constructor(
-    @InjectModel(Element.name) private elementModel: Model<ElementDocument>,
-  ) {}
+export class CaseService {
+  constructor(@InjectModel(Case.name) private caseModel: Model<CaseDocument>) {}
 
-  // to create a new element
-  // async create(data: any) {
-  //   console.log('data:>>', data);
-  //   return data;
-  // }
-
-  async create(data: CreateElementDto) {
+  async create(data: CreateCaseDto) {
     try {
-      const newElement = await this.elementModel.create({
-        ...data,
-      });
+      const newcase = await this.caseModel.create({ ...data });
       return {
         success: true,
-        data: newElement,
-        message: 'Element Created Successfully',
+        data: newcase,
+        message: 'Case Created Successfully',
       };
     } catch (error) {
       console.error(error);
@@ -59,45 +49,16 @@ export class ElementService {
     }
   }
 
-  // Retreive specific element
-  async findOne(id: any) {
+  async findByCategory(categoryId: string) {
     try {
-      const element = await this.elementModel.findById(id);
-      return {
-        success: true,
-        message: 'Element found',
-        data: element,
-      };
-    } catch (error) {
-      console.error('error finding element', error);
-      if (error.name === 'CastError') {
-        throw new NotFoundException({
-          success: false,
-          message: 'blog not Found',
-        });
-      }
-      throw new HttpException(
-        {
-          success: false,
-          message: 'Error fetching element Details',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  // retrieve by service
-
-  async findByService(serviceId: string) {
-    try {
-      const elementList = await this.elementModel
-        .find({ service: serviceId })
-        .populate('service');
+      const caseList = await this.caseModel
+        .find({ category: categoryId })
+        .populate('category');
 
       return {
         success: true,
-        data: elementList,
-        message: 'Element list',
+        data: caseList,
+        message: 'Case list',
       };
     } catch (error) {
       console.log(error);
@@ -112,18 +73,44 @@ export class ElementService {
     }
   }
 
-  async findAll() {
+  async findOne(id: any) {
     try {
-      const elementList = await this.elementModel.find().populate('service');
+      const cases = await this.caseModel.findById(id);
       return {
         success: true,
-        data: elementList,
+        message: 'Case found',
+        data: cases,
+      };
+    } catch (error) {
+      console.error('error finding Case', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'Case not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching Case Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findAll() {
+    try {
+      const caseList = await this.caseModel.find().populate('category');
+      return {
+        success: true,
+        data: caseList,
         message: 'Element list',
       };
     } catch (error) {
       console.log(error);
       if (error.response.statusCode === 404) {
-        throw new NotFoundException('No Elements Found');
+        throw new NotFoundException('No Cases Found');
       } else {
         throw new HttpException(
           {
@@ -136,29 +123,29 @@ export class ElementService {
     }
   }
 
-  async updateOne(id: string, data: UpdateElementDto) {
+  async updateOne(id: string, data: UpdateCaseDto) {
     try {
-      const updatedElement = await this.elementModel.findByIdAndUpdate(
+      const updatedCase = await this.caseModel.findByIdAndUpdate(
         id,
         { ...data },
         { new: true, runValidators: true },
       );
       return {
         success: true,
-        data: updatedElement,
-        message: 'Element Updated',
+        data: updatedCase,
+        message: 'Case Updated',
       };
     } catch (error) {
       if (error.name === 'CastError') {
         throw new NotFoundException({
           success: false,
-          message: 'Blog not Found',
+          message: 'Case not Found',
         });
       }
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to Update Blog',
+          message: 'Failed to Update Case',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

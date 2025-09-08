@@ -20,6 +20,7 @@ import { BlogPostService } from './blog-post/blog-post.service';
 import { BlogPostModule } from './blog-post/blog-post.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FileUploadsModule } from './file-uploads/file-uploads.module';
+import { CaseModule } from './case/case.module';
 
 dotenv.config({ path: '.env' });
 
@@ -42,6 +43,7 @@ if (!process.env.DATABASE_URL) {
       dest: './uploads',
     }),
     FileUploadsModule,
+    CaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
