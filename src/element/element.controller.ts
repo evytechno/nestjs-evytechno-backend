@@ -24,8 +24,6 @@ export class ElementController {
 
   @Post()
   async create(@Body() body: CreateElementDto) {
-    console.log('BODY', body);
-
     return this.elementService.create(body);
     // return await this.elementService.create(body);
   }

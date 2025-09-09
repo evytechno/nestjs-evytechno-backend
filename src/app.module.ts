@@ -21,6 +21,7 @@ import { BlogPostModule } from './blog-post/blog-post.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FileUploadsModule } from './file-uploads/file-uploads.module';
 import { CaseModule } from './case/case.module';
+import { SettingsModule } from './settings/settings.module';
 
 dotenv.config({ path: '.env' });
 
@@ -44,6 +45,7 @@ if (!process.env.DATABASE_URL) {
     }),
     FileUploadsModule,
     CaseModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
