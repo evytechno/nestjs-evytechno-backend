@@ -22,6 +22,12 @@ export class Services {
   @Prop({ default: '#000000' })
   color2: string;
 
+  @Prop({ default: false })
+  is_published: boolean;
+
+  @Prop({ default: false })
+  is_deleted: boolean;
+
   // @Prop() //elements foreign key to be implemented
   // elements:
 }

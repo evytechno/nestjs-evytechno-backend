@@ -73,7 +73,7 @@ export class ElementService {
       if (error.name === 'CastError') {
         throw new NotFoundException({
           success: false,
-          message: 'blog not Found',
+          message: 'element not Found',
         });
       }
       throw new HttpException(
@@ -154,13 +154,13 @@ export class ElementService {
       if (error.name === 'CastError') {
         throw new NotFoundException({
           success: false,
-          message: 'Blog not Found',
+          message: 'Element not Found',
         });
       }
       throw new HttpException(
         {
           success: false,
-          message: 'Failed to Update Blog',
+          message: 'Failed to Update Element',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
