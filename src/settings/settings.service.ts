@@ -18,7 +18,7 @@ export class SettingsService {
   async findAll() {
     try {
       const setting = await this.settingsModel.findOne();
-      console.log('Settings get', setting);
+      // console.log('Settings get', setting);
 
       if (setting) {
         return {
@@ -28,7 +28,7 @@ export class SettingsService {
         };
       } else {
         const settingDetail = await this.settingsModel.create({ title: '' });
-        console.log('Settings detail', settingDetail);
+        // console.log('Settings detail', settingDetail);
 
         return {
           success: true,
