@@ -7,17 +7,26 @@ export type ElementDocument = Element & Document;
 export class Element {
   @Prop({ required: true })
   name: string;
+
   @Prop({})
+  title: string;
+
+  @Prop({ default: null })
   icon: string;
+
   @Prop({ required: true })
   description: string;
-  @Prop({})
+
+  @Prop({ default: null })
   image: string;
+
   @Prop({ type: Types.ObjectId, ref: Services.name, required: true })
   service: Types.ObjectId;
-  @Prop({})
-  color1: string;
-  @Prop({})
-  color2: string;
+
+  @Prop({ default: false })
+  is_published: boolean;
+
+  @Prop({ default: false })
+  is_deleted: boolean;
 }
 export const ElementSchema = SchemaFactory.createForClass(Element);

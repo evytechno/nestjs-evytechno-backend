@@ -16,6 +16,13 @@ import { ElementModule } from './element/element.module';
 import * as dotenv from 'dotenv';
 import { Response } from 'express';
 import { AuthModule } from './auth/auth.module';
+import { BlogPostService } from './blog-post/blog-post.service';
+import { BlogPostModule } from './blog-post/blog-post.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { FileUploadsModule } from './file-uploads/file-uploads.module';
+import { CaseModule } from './case/case.module';
+import { SettingsModule } from './settings/settings.module';
+import { PagesModule } from './pages/pages.module';
 
 dotenv.config({ path: '.env' });
 
@@ -33,6 +40,14 @@ if (!process.env.DATABASE_URL) {
     ServicesModule,
     ElementModule,
     AuthModule,
+    BlogPostModule,
+    MulterModule.register({
+      dest: './uploads',
+    }),
+    FileUploadsModule,
+    CaseModule,
+    SettingsModule,
+    PagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
