@@ -40,9 +40,14 @@ async function bootstrap() {
   );
   // default prefix /api for api calls
   app.setGlobalPrefix('/api');
+  const corsOrigin = process.env.CORS_ORIGIN?.split(',').map((origin) =>
+    origin.trim(),
+  );
+  // console.log('env', corsOrigin);
+
   // Cors
   app.enableCors({
-    origin: 'http://localhost:8000',
+    origin: corsOrigin || ['http://localhost:8000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
