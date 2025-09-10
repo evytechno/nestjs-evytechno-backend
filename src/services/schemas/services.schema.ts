@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type ServicesDocument = Services & Document;
 @Schema()
@@ -27,6 +27,9 @@ export class Services {
 
   @Prop({ default: false })
   is_deleted: boolean;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Element' }] })
+  elements: Element[];
 
   // @Prop() //elements foreign key to be implemented
   // elements:

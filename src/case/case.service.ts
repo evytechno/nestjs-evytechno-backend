@@ -75,7 +75,7 @@ export class CaseService {
 
   async findOne(id: any) {
     try {
-      const cases = await this.caseModel.findById(id);
+      const cases = await this.caseModel.findById(id).populate('category');
       return {
         success: true,
         message: 'Case found',

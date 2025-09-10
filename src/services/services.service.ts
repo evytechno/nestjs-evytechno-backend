@@ -51,7 +51,12 @@ export class ServicesService {
   }
   async findAll() {
     try {
-      const serviceList = await this.servicesModel.find({ is_deleted: false });
+      const serviceList = await this.servicesModel
+        .find({ is_deleted: false })
+        .populate('elements', {
+          path: 'elements',
+          model: 'Element',
+        });
 
       return {
         success: true,
@@ -75,7 +80,12 @@ export class ServicesService {
   }
   async findOne(id: string) {
     try {
-      const service = await this.servicesModel.findById(id);
+      const service = await this.servicesModel
+        .findById(id)
+        .populate('elements', {
+          path: 'elements',
+          model: 'Element',
+        });
       return {
         success: true,
         message: 'Service found',

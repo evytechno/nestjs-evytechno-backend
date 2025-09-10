@@ -81,7 +81,7 @@ export class BlogPostService {
   // Retreive specific Blog
   async findOne(id: any) {
     try {
-      const blog = await this.blogPostModel.findById(id);
+      const blog = await this.blogPostModel.findById(id).populate('category');
       return {
         success: true,
         message: 'Blog found',
