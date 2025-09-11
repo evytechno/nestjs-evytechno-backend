@@ -1,10 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import slugify from 'slugify';
 
 export type PagesDocument = Pages & Document;
 
 @Schema()
 export class Pages {
+  @Prop({ unique: true })
+  slug: string;
+
   @Prop({ require: true })
   name: string;
 
@@ -23,3 +27,10 @@ export class Pages {
 }
 
 export const PagesSchema = SchemaFactory.createForClass(Pages);
+
+PagesSchema.pre('save', function (next) {
+  if (this.isModified('name')) {
+    this.slug = slugify(this.name, { lower: true, strict: true });
+  }
+  next();
+});

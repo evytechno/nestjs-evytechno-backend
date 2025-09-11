@@ -33,6 +33,11 @@ export class ServicesController {
     return this.servicesService.findAll();
   }
 
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.servicesService.findOneBySlug(slug);
+  }
+
   @Put(`:id`)
   update(@Param(`id`) id: string, @Body() body: UpdateServiceDto) {
     return this.servicesService.updateOne(id, body);

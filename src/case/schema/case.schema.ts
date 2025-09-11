@@ -1,10 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import slugify from 'slugify';
 import { Services } from 'src/services/schemas/services.schema';
 
 export type CaseDocument = Case & Document;
 @Schema()
 export class Case {
+  @Prop({ unique: true })
+  slug: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -31,3 +35,10 @@ export class Case {
 }
 
 export const CaseSchema = SchemaFactory.createForClass(Case);
+
+CaseSchema.pre('save', function (next) {
+  if (this.isModified('name')) {
+    this.slug = slugify(this.name, { lower: true, strict: true });
+  }
+  next();
+});

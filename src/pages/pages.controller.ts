@@ -20,6 +20,11 @@ export class PagesController {
     return this.pageService.findAll();
   }
 
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.pageService.findOneBySlug(slug);
+  }
+
   @Put(`:id`)
   update(@Param(`id`) id: string, @Body() body: UpdatePageDto) {
     return this.pageService.updateOne(id, body);

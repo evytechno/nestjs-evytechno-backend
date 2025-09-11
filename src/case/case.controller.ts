@@ -20,7 +20,15 @@ export class CaseController {
     if (query?.id) {
       return this.caseService.findOne(query.id);
     }
+    // if (query?.slug) {
+    //   return this.caseService.findOne(query.slug);
+    // }
     return this.caseService.findAll();
+  }
+
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.caseService.findOnebySlug(slug);
   }
 
   @Put(`:id`)

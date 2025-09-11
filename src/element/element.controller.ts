@@ -39,6 +39,11 @@ export class ElementController {
     return this.elementService.findAll();
   }
 
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.elementService.findOneBySlug(slug);
+  }
+
   @Put(`:id`)
   update(@Param(`id`) id: string, @Body() body: UpdateElementDto) {
     return this.elementService.updateOne(id, body);

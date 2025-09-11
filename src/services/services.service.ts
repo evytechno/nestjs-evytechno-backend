@@ -109,6 +109,37 @@ export class ServicesService {
     }
   }
 
+  async findOneBySlug(slug: string) {
+    try {
+      const service = await this.servicesModel
+        .findOne({ slug })
+        .populate('elements', {
+          path: 'elements',
+          model: 'Element',
+        });
+      return {
+        success: true,
+        message: 'Service found',
+        data: service,
+      };
+    } catch (error) {
+      console.error('error finding service', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'service not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching service Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async updateOne(id: string, data: UpdateServiceDto) {
     try {
       const updatedService = await this.servicesModel.findByIdAndUpdate(

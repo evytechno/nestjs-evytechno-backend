@@ -79,6 +79,32 @@ export class PagesService {
     }
   }
 
+  async findOneBySlug(slug: any) {
+    try {
+      const element = await this.pagesModel.findOne({ slug });
+      return {
+        success: true,
+        message: 'Page found',
+        data: element,
+      };
+    } catch (error) {
+      console.error('error finding page', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'page not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching page Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findAll() {
     try {
       const pageList = await this.pagesModel.find({ is_deleted: false });

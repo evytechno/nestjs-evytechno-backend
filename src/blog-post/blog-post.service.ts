@@ -105,6 +105,34 @@ export class BlogPostService {
     }
   }
 
+  async findOneBySlug(slug: any) {
+    try {
+      const blog = await this.blogPostModel
+        .findOne({ slug })
+        .populate('category');
+      return {
+        success: true,
+        message: 'Blog found',
+        data: blog,
+      };
+    } catch (error) {
+      console.error('error finding blog', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'blog not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching blog Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async updateOne(id: string, data: UpdateBlogPostDto) {
     try {
       const updatedBlog = await this.blogPostModel.findByIdAndUpdate(
