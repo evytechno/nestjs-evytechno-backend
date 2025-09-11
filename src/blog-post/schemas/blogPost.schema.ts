@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import slugify from 'slugify';
 import { Services } from 'src/services/schemas/services.schema';
 import { User } from 'src/user/schemas/user.schemas';
 
@@ -7,6 +8,9 @@ export type BlogPostDocument = BlogPost & Document;
 
 @Schema()
 export class BlogPost {
+  @Prop({ unique: true })
+  slug: string;
+
   @Prop({ required: true })
   title: string;
 
@@ -54,3 +58,11 @@ export class BlogPost {
 }
 
 export const BlogPostSchema = SchemaFactory.createForClass(BlogPost);
+
+//Middleware for generating slug at save time
+BlogPostSchema.pre('save', function (next) {
+  if (this.isModified('title')) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+  next();
+});

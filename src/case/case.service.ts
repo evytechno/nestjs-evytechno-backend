@@ -73,7 +73,7 @@ export class CaseService {
     }
   }
 
-  async findOne(id: any) {
+  async findOne(id: string) {
     try {
       const cases = await this.caseModel.findById(id).populate('category');
       return {
@@ -99,11 +99,38 @@ export class CaseService {
     }
   }
 
-  async findAll() {
+  async findOnebySlug(slug: string) {
+    try {
+      const cases = await this.caseModel.findOne({ slug }).populate('category');
+      return {
+        success: true,
+        message: 'Case found',
+        data: cases,
+      };
+    } catch (error) {
+      console.error('error finding Case', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'Case not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching Case Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findAll(limit?: number) {
     try {
       const caseList = await this.caseModel
         .find({ is_deleted: false })
         .populate('category');
+      if (limit) caseList.splice(limit);
       return {
         success: true,
         data: caseList,

@@ -17,7 +17,15 @@ export class PagesController {
     if (query?.id) {
       return this.pageService.findOne(query.id);
     }
+    if (query?.limit) {
+      return this.pageService.findAll(query.limit);
+    }
     return this.pageService.findAll();
+  }
+
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.pageService.findOneBySlug(slug);
   }
 
   @Put(`:id`)

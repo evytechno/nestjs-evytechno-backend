@@ -49,7 +49,7 @@ export class ServicesService {
       }
     }
   }
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const serviceList = await this.servicesModel
         .find({ is_deleted: false })
@@ -58,6 +58,7 @@ export class ServicesService {
           model: 'Element',
         });
 
+      if (limit) serviceList.splice(limit);
       return {
         success: true,
         data: serviceList,
@@ -82,6 +83,37 @@ export class ServicesService {
     try {
       const service = await this.servicesModel
         .findById(id)
+        .populate('elements', {
+          path: 'elements',
+          model: 'Element',
+        });
+      return {
+        success: true,
+        message: 'Service found',
+        data: service,
+      };
+    } catch (error) {
+      console.error('error finding service', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'service not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching service Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOneBySlug(slug: string) {
+    try {
+      const service = await this.servicesModel
+        .findOne({ slug })
         .populate('elements', {
           path: 'elements',
           model: 'Element',

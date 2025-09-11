@@ -53,15 +53,15 @@ export class BlogPostService {
   }
 
   //Retrieve Blogs
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const blogs = await this.blogPostModel
         .find({ is_deleted: false })
-        // .select(
-        //   'title date_created is_published date_published is_deleted category',
-        // )
         .populate('category')
         .sort({ date_created: -1 });
+      if (limit) {
+        blogs.splice(limit);
+      }
       return {
         success: true,
         message: 'Blog List',
@@ -82,6 +82,34 @@ export class BlogPostService {
   async findOne(id: any) {
     try {
       const blog = await this.blogPostModel.findById(id).populate('category');
+      return {
+        success: true,
+        message: 'Blog found',
+        data: blog,
+      };
+    } catch (error) {
+      console.error('error finding blog', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'blog not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching blog Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOneBySlug(slug: any) {
+    try {
+      const blog = await this.blogPostModel
+        .findOne({ slug })
+        .populate('category');
       return {
         success: true,
         message: 'Blog found',

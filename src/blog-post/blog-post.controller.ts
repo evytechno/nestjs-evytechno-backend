@@ -1,20 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { BlogPostService } from './blog-post.service';
 import { CreateBlogPostDto } from './dto/create-blogpost.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+
 import { UpdateBlogPostDto } from './dto/update-blogpost.dto';
 
 @Controller('blog')
@@ -31,7 +18,15 @@ export class BlogPostController {
     if (query?.id) {
       return this.blogPostService.findOne(query.id);
     }
+    if (query?.limit) {
+      return this.blogPostService.findAll(query.limit);
+    }
     return this.blogPostService.findAll();
+  }
+
+  @Get(`:slug`)
+  findOne(@Param(`slug`) slug: string) {
+    return this.blogPostService.findOneBySlug(slug);
   }
 
   @Put(`:id`)

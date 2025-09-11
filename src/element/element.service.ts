@@ -60,9 +60,35 @@ export class ElementService {
   }
 
   // Retreive specific element
-  async findOne(id: any) {
+  async findOne(id: string) {
     try {
       const element = await this.elementModel.findById(id);
+      return {
+        success: true,
+        message: 'Element found',
+        data: element,
+      };
+    } catch (error) {
+      console.error('error finding element', error);
+      if (error.name === 'CastError') {
+        throw new NotFoundException({
+          success: false,
+          message: 'element not Found',
+        });
+      }
+      throw new HttpException(
+        {
+          success: false,
+          message: 'Error fetching element Details',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOneBySlug(slug: string) {
+    try {
+      const element = await this.elementModel.findOne({ slug });
       return {
         success: true,
         message: 'Element found',
@@ -112,11 +138,12 @@ export class ElementService {
     }
   }
 
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const elementList = await this.elementModel
         .find({ is_deleted: false })
         .populate('service');
+      if (limit) elementList.splice(limit);
       return {
         success: true,
         data: elementList,

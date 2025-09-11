@@ -1,10 +1,14 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import slugify from 'slugify';
 import { Services } from 'src/services/schemas/services.schema';
 
 export type ElementDocument = Element & Document;
 @Schema()
 export class Element {
+  @Prop({ unique: true })
+  slug: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -30,3 +34,10 @@ export class Element {
   is_deleted: boolean;
 }
 export const ElementSchema = SchemaFactory.createForClass(Element);
+
+ElementSchema.pre('save', function (next) {
+  if (this.isModified('name')) {
+    this.slug = slugify(this.name, { lower: true, strict: true });
+  }
+  next();
+});
