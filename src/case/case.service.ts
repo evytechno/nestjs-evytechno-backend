@@ -125,11 +125,12 @@ export class CaseService {
     }
   }
 
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const caseList = await this.caseModel
         .find({ is_deleted: false })
         .populate('category');
+      if (limit) caseList.splice(limit);
       return {
         success: true,
         data: caseList,

@@ -49,7 +49,7 @@ export class ServicesService {
       }
     }
   }
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const serviceList = await this.servicesModel
         .find({ is_deleted: false })
@@ -58,6 +58,7 @@ export class ServicesService {
           model: 'Element',
         });
 
+      if (limit) serviceList.splice(limit);
       return {
         success: true,
         data: serviceList,

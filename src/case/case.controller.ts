@@ -20,9 +20,9 @@ export class CaseController {
     if (query?.id) {
       return this.caseService.findOne(query.id);
     }
-    // if (query?.slug) {
-    //   return this.caseService.findOne(query.slug);
-    // }
+    if (query?.limit) {
+      return this.caseService.findAll(query.limit);
+    }
     return this.caseService.findAll();
   }
 

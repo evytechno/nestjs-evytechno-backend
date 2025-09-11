@@ -18,9 +18,9 @@ export class BlogPostController {
     if (query?.id) {
       return this.blogPostService.findOne(query.id);
     }
-    // if (query?.slug) {
-    //   return this.blogPostService.findOneBySlug(query.slug);
-    // }
+    if (query?.limit) {
+      return this.blogPostService.findAll(query.limit);
+    }
     return this.blogPostService.findAll();
   }
 

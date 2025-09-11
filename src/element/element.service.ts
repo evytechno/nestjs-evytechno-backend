@@ -138,11 +138,12 @@ export class ElementService {
     }
   }
 
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const elementList = await this.elementModel
         .find({ is_deleted: false })
         .populate('service');
+      if (limit) elementList.splice(limit);
       return {
         success: true,
         data: elementList,

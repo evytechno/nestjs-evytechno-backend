@@ -36,6 +36,9 @@ export class ElementController {
     if (query?.id) {
       return this.elementService.findOne(query.id);
     }
+    if (query?.limit) {
+      return this.elementService.findAll(query.limit);
+    }
     return this.elementService.findAll();
   }
 

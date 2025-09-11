@@ -105,10 +105,10 @@ export class PagesService {
     }
   }
 
-  async findAll() {
+  async findAll(limit?: number) {
     try {
       const pageList = await this.pagesModel.find({ is_deleted: false });
-
+      if (limit) pageList.splice(limit);
       return {
         success: true,
         data: pageList,

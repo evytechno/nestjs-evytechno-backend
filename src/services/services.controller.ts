@@ -30,6 +30,9 @@ export class ServicesController {
     if (query?.id) {
       return this.servicesService.findOne(query.id);
     }
+    if (query?.limit) {
+      return this.servicesService.findAll(query.limit);
+    }
     return this.servicesService.findAll();
   }
 

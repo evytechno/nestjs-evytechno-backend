@@ -17,6 +17,9 @@ export class PagesController {
     if (query?.id) {
       return this.pageService.findOne(query.id);
     }
+    if (query?.limit) {
+      return this.pageService.findAll(query.limit);
+    }
     return this.pageService.findAll();
   }
 
