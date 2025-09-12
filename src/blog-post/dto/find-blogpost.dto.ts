@@ -14,5 +14,9 @@ export class FindBlogPostDto {
   @IsOptional()
   @IsDateString()
   @Transform(({ value }) => new Date(value))
-  date: Date;
+  date_published: Date;
+
+  @IsOptional()
+  @IsMongoId()
+  category: string;
 }

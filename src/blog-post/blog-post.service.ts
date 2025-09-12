@@ -78,6 +78,47 @@ export class BlogPostService {
     }
   }
 
+  async filterAll(limit?: number, query?: any) {
+    try {
+      console.log(JSON.stringify(query));
+      if (query) {
+        const blogs = await this.blogPostModel
+          .find({ ...query, is_deleted: false, is_published: true })
+          .populate('category')
+          .sort({ date_created: -1 });
+        if (limit) {
+          blogs.splice(limit);
+        }
+        return {
+          success: true,
+          message: 'Blog List',
+          data: blogs,
+        };
+      } else {
+        const blogs = await this.blogPostModel
+          .find({ is_deleted: false })
+          .populate('category')
+          .sort({ date_created: -1 });
+        if (limit) {
+          blogs.splice(limit);
+        }
+        return {
+          success: true,
+          message: 'Blog List',
+          data: blogs,
+        };
+      }
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        {
+          sucess: false,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   // Retreive specific Blog
   async findOne(id: any) {
     try {

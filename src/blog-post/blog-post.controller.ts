@@ -3,6 +3,7 @@ import { BlogPostService } from './blog-post.service';
 import { CreateBlogPostDto } from './dto/create-blogpost.dto';
 
 import { UpdateBlogPostDto } from './dto/update-blogpost.dto';
+import { FindBlogPostDto } from './dto/find-blogpost.dto';
 
 @Controller('blog')
 export class BlogPostController {
@@ -13,6 +14,10 @@ export class BlogPostController {
     return this.blogPostService.create(body);
   }
 
+  @Get(`filter`)
+  filter(@Query() query: any, @Query('limit') limit: number) {
+    return this.blogPostService.filterAll(limit, query);
+  }
   @Get()
   find(@Query() query: any) {
     if (query?.id) {
