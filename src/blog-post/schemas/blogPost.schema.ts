@@ -61,8 +61,18 @@ export const BlogPostSchema = SchemaFactory.createForClass(BlogPost);
 
 //Middleware for generating slug at save time
 BlogPostSchema.pre('save', function (next) {
-  if (this.isModified('title')) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
-  }
+  // if (this.isModified('title')) {
+  this.slug = slugify(this.title, { lower: true, strict: true });
+  // }
+  next();
+});
+
+// For updateOne / findOneAndUpdate
+BlogPostSchema.pre(['findOneAndUpdate', 'updateOne'], function (next) {
+  const update: any = this.getUpdate();
+  // if (update) {
+  update.slug = slugify(update.title, { lower: true, strict: true });
+  this.setUpdate(update);
+  // }
   next();
 });

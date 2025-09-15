@@ -15,7 +15,7 @@ export class BlogPostController {
   }
 
   @Get(`filter`)
-  filter(@Query() query: any, @Query('limit') limit: number) {
+  filter(@Query('limit') limit: number, @Query() query: FindBlogPostDto) {
     return this.blogPostService.filterAll(limit, query);
   }
   @Get()
